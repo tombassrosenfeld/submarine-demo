@@ -36,5 +36,6 @@ h1 {
 
 .js-switch-label {
     position: absolute;
+    top: -1rem;
     left: 6rem;
 }
