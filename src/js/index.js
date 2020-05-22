@@ -27,7 +27,7 @@
         }
 
         getOutput(){
-            return this.currentOutput === 0 ? "Dry" : (this.currentOutput === 1 ? "Off" : "octave");
+            return this.currentOutput === 0 ? "Dry" : (this.currentOutput === 1 ? "Off" : "Octave");
         }
     }
 

@@ -1,6 +1,10 @@
 
 h1 {
-    color: red;
+    margin: 1rem;
+    font-family: "Josefin Sans",sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 3rem;
 }
 
 .submarine {
@@ -32,5 +36,5 @@ h1 {
 
 .js-switch-label {
     position: absolute;
-    right: -6rem;
+    left: 6rem;
 }
