@@ -47,6 +47,9 @@
             request.responseType = "arraybuffer";
             var loader = this;
             request.onload = function () {
+                console.log(request);
+                
+                
                 // Asynchronously decode the audio file data in request.response
                 loader.context.decodeAudioData(request.response, function (buffer) {
                     if (!buffer) {
@@ -72,24 +75,24 @@
     }
 
     const init = () => {
-       
+        const AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com";
         // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
         const bufferLoader = new BufferLoader(
             context,
             [
-                '/src/audio/E_1.wav',
-                '/src/audio/A_1.wav',
-                '/src/audio/G_1.wav',
-                '/src/audio/D_1.wav',
-                '/src/audio/B_1.wav',
-                '/src/audio/EE_1.wav',
-                '/src/audio/E8_1.wav',
-                '/src/audio/A8_1.wav',
-                '/src/audio/G8_1.wav',
-                '/src/audio/D8_1.wav',
-                '/src/audio/B8_1.wav',
-                '/src/audio/EE8_1.wav',
-                '/src/audio/all-strings.wav',
+                `${AWS}/E_1.wav`,
+                `${AWS}/A_1.wav`,
+                `${AWS}/G_1.wav`,
+                `${AWS}/D_1.wav`,
+                `${AWS}/B_1.wav`,
+                `${AWS}/EE_1.wav`,
+                `${AWS}/E8_1.wav`,
+                `${AWS}/A8_1.wav`,
+                `${AWS}/G8_1.wav`,
+                `${AWS}/D8_1.wav`,
+                `${AWS}/B8_1.wav`,
+                `${AWS}/EE8_1.wav`,
+                `${AWS}/all-strings.wav`,
             ],
             finishedLoading
         );
