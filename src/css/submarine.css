@@ -11,11 +11,16 @@ h1 {
     width: 8rem;
     height: 16rem;
     border: 1px solid #000;
-    margin: 4rem;
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+}
+
+.sub-container {
+   
+    margin-left: 4rem;
 }
 
 .switch {
@@ -38,4 +43,8 @@ h1 {
     position: absolute;
     top: -1rem;
     left: 6rem;
+}
+
+.play {
+    margin-top: 2rem;
 }
