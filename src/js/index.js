@@ -106,6 +106,9 @@
         const submarine  = d.getElementById('sub-switches');
         const domSwitches = Array.from(d.getElementsByClassName('switch'));
         const labels = Array.from(d.getElementsByClassName('js-switch-label'));
+        const controls = d.getElementById('js-controls');
+        const play = d.getElementById('js-play');
+        const pause = d.getElementById('js-pause');
 
         // set up sources
         const sources = bufferList.map((buffer) => {
@@ -114,22 +117,46 @@
             return source;
         });
 
-        // start playback
-        sources.forEach((source, i) => {
-            if (i < 6 ) { source.connect(context.destination); }
-            source.start(0);
-        });
         
+        // start playback
+        const playSources = () => { 
+            sources.forEach((source, i) => {
+                if (i < 6 ) { source.connect(context.destination); }
+                source.start(0);
+            });
+        };
+        console.log(context.state);
+        
+        controls.addEventListener('click', (e) => {
+            const target = e.target;
+
+            if (target === play && context.state !== 'suspended') {
+                playSources();
+    
+                play.setAttribute('disabled', 'disabled');
+                pause.removeAttribute('disabled');
+            } else if (target === play && context.state === 'suspended') {
+                context.resume().then( () => {
+                    play.setAttribute('disabled', 'disabled');
+                    pause.removeAttribute('disabled');
+                });
+            } else if ( target === pause ) {
+                context.suspend().then( () => {
+                    pause.setAttribute('disabled', 'disabled');
+                    play.removeAttribute('disabled');
+                });
+            }
+        })
+
+
+
         const switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch(context, sources[i], sources[i + 6]) );
 
         domSwitches.forEach((domSwitch, i) => {
-            console.log(domSwitch);
-            
-            // domSwitch
+
             const jsSwitch = switches[i];
             
             domSwitch.addEventListener('click', () => {
-                // console.log( switches[i]);
                 switches[i].toggleOutput();
                 const output = jsSwitch.currentOutput;
                 console.log(output);
