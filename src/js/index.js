@@ -1,35 +1,6 @@
 (d => {
 
-    window.AudioContext = window.AudioContext||window.webkitAudioContext;
-    const context = new AudioContext();
-    
-    class Switch {
-        constructor(context, input1, input2, currentOutput = 0) {
-            this.context = context;
-            this.input1 = input1;
-            this.input2 = input2;
-            this.currentOutput = currentOutput;
-        }
-
-        toggleOutput() {
-            this.currentOutput = (this.currentOutput + 1) % 3;
-            
-            if (this.currentOutput === 0) {
-                this.input2.disconnect();
-                this.input1.connect(context.destination);
-            } else if (this.currentOutput === 1) {
-                this.input2.disconnect();
-                this.input1.disconnect();
-            } else if (this.currentOutput === 2) {
-                this.input1.disconnect();
-                this.input2.connect(context.destination);
-            }
-        }
-
-        getOutput(){
-            return this.currentOutput === 0 ? "Dry" : (this.currentOutput === 1 ? "Off" : "Octave");
-        }
-    }
+   
 
     class BufferLoader {
         constructor(context, urlList, callback) {
@@ -73,12 +44,75 @@
                 this.loadBuffer(this.urlList[i], i);
         }
     }
+    
+    class Switch {
+        constructor(currentOutput = 0) {
+            this.currentOutput = currentOutput;
+        }
+
+        context = null;
+        input1 = null;
+        input2 = null;
+
+        setContext( context, input1, input2){
+            this.context = context;
+            this.input1 = input1;
+            this.input2 = input2;
+            return this;
+        }
+
+        toggleOutput() {
+            this.currentOutput = (this.currentOutput + 1) % 3;
+            
+            if (this.currentOutput === 0) {
+                this.input2.disconnect();
+                this.input1.connect(context.destination);
+            } else if (this.currentOutput === 1) {
+                this.input2.disconnect();
+                this.input1.disconnect();
+            } else if (this.currentOutput === 2) {
+                this.input1.disconnect();
+                this.input2.connect(context.destination);
+            }
+            return this;
+        }
+
+        getOutput(){
+            return this.currentOutput === 0 ? "Dry" : (this.currentOutput === 1 ? "Off" : "Octave");
+        }
+    }
+
+    window.AudioContext = window.AudioContext||window.webkitAudioContext;
+    const   submarine  = d.getElementById('sub-switches'),
+            domSwitches = Array.from(d.getElementsByClassName('switch')),
+            labels = Array.from(d.getElementsByClassName('js-switch-label')),
+            controls = d.getElementById('js-controls'),
+            play = d.getElementById('js-play'),
+            pause = d.getElementById('js-pause'),
+            switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch());
+
+    let context; 
+
+    domSwitches.forEach((domSwitch, i) => {
+
+        const jsSwitch = switches[i];
+        
+        domSwitch.addEventListener('click', () => {
+            switches[i].toggleOutput();
+            const output = jsSwitch.currentOutput;
+            
+            domSwitch.style.justifyContent = output === 0 ? "flex-start" : (output === 1 ? "center" : "flex-end");
+            labels[i].textContent = jsSwitch.getOutput();
+        })
+    })
+
+    
 
     const init = () => {
         const AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com";
         // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
         const bufferLoader = new BufferLoader(
-            context,
+            context = new AudioContext(),
             [
                 `${AWS}/E_1.wav`,
                 `${AWS}/A_1.wav`,
@@ -103,13 +137,6 @@
     window.onload = init;
 
     const finishedLoading = (bufferList) => {
-        const submarine  = d.getElementById('sub-switches');
-        const domSwitches = Array.from(d.getElementsByClassName('switch'));
-        const labels = Array.from(d.getElementsByClassName('js-switch-label'));
-        const controls = d.getElementById('js-controls');
-        const play = d.getElementById('js-play');
-        const pause = d.getElementById('js-pause');
-
         // set up sources
         const sources = bufferList.map((buffer) => {
             const source = context.createBufferSource();
@@ -117,58 +144,36 @@
             return source;
         });
 
-        
+        switches.forEach((jsSwitch, i) => {
+            jsSwitch.setContext(context, sources[i], sources[i + 6] );
+        });
+
         // start playback
-        const playSources = () => { 
-            sources.forEach((source, i) => {
-                if (i < 6 ) { source.connect(context.destination); }
-                source.start(0);
-            });
-        };
-        console.log(context.state);
-        
-        controls.addEventListener('click', (e) => {
-            const target = e.target;
-
-            if (target === play && context.state !== 'suspended') {
-                playSources();
-    
-                play.setAttribute('disabled', 'disabled');
-                pause.removeAttribute('disabled');
-            } else if (target === play && context.state === 'suspended') {
-                context.resume().then( () => {
-                    play.setAttribute('disabled', 'disabled');
-                    pause.removeAttribute('disabled');
-                });
-            } else if ( target === pause ) {
-                context.suspend().then( () => {
-                    pause.setAttribute('disabled', 'disabled');
-                    play.removeAttribute('disabled');
-                });
-            }
-        })
-
-
-
-        const switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch(context, sources[i], sources[i + 6]) );
-
-        domSwitches.forEach((domSwitch, i) => {
-
-            const jsSwitch = switches[i];
-            
-            domSwitch.addEventListener('click', () => {
-                switches[i].toggleOutput();
-                const output = jsSwitch.currentOutput;
-                console.log(output);
-                
-                domSwitch.style.justifyContent = output === 0 ? "flex-start" : (output === 1 ? "center" : "flex-end");
-                console.log(labels[i]);
-                labels[i].textContent = jsSwitch.getOutput();
-            })
-        })
+        sources.forEach((source, i) => {
+            if (i < 6 ) { source.connect(context.destination); }
+            source.start(0);
+        });
     }
 
     
-    
+    controls.addEventListener('click', (e) => {
+        const target = e.target;
+
+        if (target === play && context.state !== 'suspended') {
+            init();
+            play.setAttribute('disabled', 'disabled');
+            pause.removeAttribute('disabled');
+        } else if (target === play && context.state === 'suspended') {
+            context.resume().then( () => {
+                play.setAttribute('disabled', 'disabled');
+                pause.removeAttribute('disabled');
+            });
+        } else if ( target === pause ) {
+            context.suspend().then( () => {
+                pause.setAttribute('disabled', 'disabled');
+                play.removeAttribute('disabled');
+            });
+        }
+    })
 
 })(document)
