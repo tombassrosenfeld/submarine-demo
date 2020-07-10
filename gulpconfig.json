@@ -1,0 +1,26 @@
+{
+    "browserSyncOptions" : {
+    // Set proxy to your Vagrantfile's config.vm.hostname address
+    "proxy": "file:///Users/thomasrosenfeld/Documents/submarine/",
+    "notify": false
+  },
+  "browserSyncWatchFiles" : [
+    "./css/*.min.css",
+    "./js/*.min.js",
+    "./index.html"
+  ],
+  "paths" : {
+    "js": "./js",
+    "pedalboard": "./pedalboard/dist/",
+    "css": "./css",
+    "img": "./img",
+		"imgsrc": "./src/img",
+    "sass": "./sass",
+    "node": "./node_modules/",
+    "bower": "./bower_components/",
+    "dev": "./src",
+    "dist": "./dist",
+    "distprod": "./dist-product",
+    "vendor": ""
+  }
+}

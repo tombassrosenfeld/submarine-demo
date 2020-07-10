@@ -1,0 +1,16 @@
+{
+  "name": "submarine",
+  "version": "1.0.0",
+  "description": "test for submarine pickup audio",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "",
+  "license": "ISC"
+}
