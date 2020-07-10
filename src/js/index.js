@@ -89,7 +89,8 @@
 
             return this;
         }
-
+        // TO DO convert this to use data and have the output gain removed from the toggle so that user can channel select pre play
+        
         toggleOutput() {
             this.currentOutput = (this.currentOutput + 1) % 3;
             
