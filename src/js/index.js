@@ -62,7 +62,6 @@
         }
 
         setContext( context, input1, input2){
-            console.log("context set");
             
             //set context
             this.context = context;
@@ -89,7 +88,8 @@
 
             return this;
         }
-
+        // TO DO convert this to use data and have the output gain removed from the toggle so that user can channel select pre play
+        
         toggleOutput() {
             this.currentOutput = (this.currentOutput + 1) % 3;
             
@@ -117,36 +117,50 @@
             AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com",
             // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
             sourceList = [
+                // wet strings
+
+                // `${AWS}/e_effect.wav`,
+                // `${AWS}/a_effect.wav`,
+                // `${AWS}/g_effect.wav`,
+                // `${AWS}/d_effect.wav`,
+                // `${AWS}/b_effect.wav`,
+                // `${AWS}/ee_effect.wav`,
+               
+                // dry strings
+
                 `${AWS}/E_1.wav`,
                 `${AWS}/A_1.wav`,
                 `${AWS}/G_1.wav`,
                 `${AWS}/D_1.wav`,
                 `${AWS}/B_1.wav`,
                 `${AWS}/EE_1.wav`,
+
+                // octave strings
+
                 `${AWS}/E8_1.wav`,
                 `${AWS}/A8_1.wav`,
                 `${AWS}/G8_1.wav`,
                 `${AWS}/D8_1.wav`,
                 `${AWS}/B8_1.wav`,
                 `${AWS}/EE8_1.wav`,
-                `${AWS}/all-strings.wav`,
+
+                // full acoustic
+
+                `${AWS}/iphone_audio.wav`,
             ],
             domSwitches = Array.from(d.getElementsByClassName('switch')),
             labels = Array.from(d.getElementsByClassName('js-switch-label')),
             controls = d.getElementById('js-controls'),
             play = d.getElementById('js-play'),
             pause = d.getElementById('js-pause'),
-            switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch(domSwitch, labels[i]));
+            switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch(domSwitch, labels[i])),
+            video = d.getElementById('subVid');
 
     let context; 
 
     switches.forEach((jsSwitch, i) => jsSwitch.setDomClickEvent());
 
-    
-
     const init = () => {
-        console.log('inniting');
-        
         const bufferLoader = new BufferLoader(
             context = new AudioContext(),
             sourceList,
@@ -155,8 +169,6 @@
 
         bufferLoader.load();
     }
-        
-    // window.onload = init;
 
     const finishedLoading = (bufferList) => {
         // set up sources
@@ -172,12 +184,14 @@
 
         // start playback
         sources.forEach((source, i) => {
-            // if (i < 6 ) { source.connect(context.destination); }
             source.start(0);
         });
+
+        video.play();
     }
 
     let playing = false;
+
     controls.addEventListener('click', (e) => {
         const target = e.target;
 
@@ -191,11 +205,13 @@
                 play.setAttribute('disabled', 'disabled');
                 pause.removeAttribute('disabled');
             });
+            video.play();
         } else if ( target === pause ) {
             context.suspend().then( () => {
                 pause.setAttribute('disabled', 'disabled');
                 play.removeAttribute('disabled');
             });
+            video.pause();
         }
     })
 
