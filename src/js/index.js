@@ -119,34 +119,34 @@
             sourceList = [
                 // wet strings
 
-                // `${AWS}/e_effect.wav`,
-                // `${AWS}/a_effect.wav`,
-                // `${AWS}/g_effect.wav`,
-                // `${AWS}/d_effect.wav`,
-                // `${AWS}/b_effect.wav`,
-                // `${AWS}/ee_effect.wav`,
+                `${AWS}/e_effect.wav`,
+                `${AWS}/a_effect.wav`,
+                `${AWS}/g_effect.wav`,
+                `${AWS}/d_effect.wav`,
+                `${AWS}/b_effect.wav`,
+                `${AWS}/ee_effect.wav`,
                
                 // dry strings
 
-                `${AWS}/E_1.wav`,
-                `${AWS}/A_1.wav`,
-                `${AWS}/G_1.wav`,
-                `${AWS}/D_1.wav`,
-                `${AWS}/B_1.wav`,
-                `${AWS}/EE_1.wav`,
+                // `${AWS}/e_dry.wav`,
+                // `${AWS}/a_dry.wav`,
+                // `${AWS}/g_dry.wav`,
+                // `${AWS}/d_dry.wav`,
+                // `${AWS}/b_dry.wav`,
+                // `${AWS}/ee_dry.wav`,
 
                 // octave strings
 
-                `${AWS}/E8_1.wav`,
-                `${AWS}/A8_1.wav`,
-                `${AWS}/G8_1.wav`,
-                `${AWS}/D8_1.wav`,
-                `${AWS}/B8_1.wav`,
-                `${AWS}/EE8_1.wav`,
+                `${AWS}/e_octave.wav`,
+                `${AWS}/a_octave.wav`,
+                `${AWS}/g_octave.wav`,
+                `${AWS}/d_octave.wav`,
+                `${AWS}/b_octave.wav`,
+                `${AWS}/ee_octave.wav`,
 
                 // full acoustic
 
-                `${AWS}/iphone_audio.wav`,
+                `${AWS}/full_acoustic.wav`,
             ],
             domSwitches = Array.from(d.getElementsByClassName('switch')),
             labels = Array.from(d.getElementsByClassName('js-switch-label')),
