@@ -11,13 +11,13 @@
 <body>
     <header>
         <h1>Submarine test</h1>
-
     </header>
     <main>
-        <video id="subVid" src="https://submarine-video.s3.eu-west-2.amazonaws.com/hexaphonic+iphone+video.mp4" width="800" muted></video>
+        <video id="subVid" src="https://submarine-audio.s3.eu-west-2.amazonaws.com/hexaphonic-video.mp4" width="800" muted></video>
         <div id="js-controls" class="controls">
             <button id="js-play" class="play">Play</button>
             <button id="js-pause" class="pause" disabled>Pause</button>
+        </div>
         <div class="audio-controls">
             <section class="sub-container">
                 <div id="sub-switches" class="submarine">
@@ -45,6 +45,20 @@
                         <span class="switch__inner"></span>
                         <p class="js-switch-label">Dry</p>
                     </div>
+                </div>
+            </section>
+            <section class="channel-levels">
+                <div class="slider effects">
+                    <input id="effects" type="range" min="0" max="10" value="5" orient="vertical">
+                    <label for="effects">Effects</label>
+                </div>
+                <div class="slider acoustic">
+                    <input id="acoustic" type="range" min="0" max="10" value="5" orient="vertical">
+                    <label for="acoustic">Acoustic</label>
+                </div>
+                <div class="slider octave">
+                    <input id="octave-down" type="range" min="0" max="10" value="5" orient="vertical">
+                    <label for="octave-down">Octave Down</label>
                 </div>
             </section>
         </div>
