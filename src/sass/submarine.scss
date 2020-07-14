@@ -1,0 +1,89 @@
+
+body {
+    font-family: "Josefin Sans",sans-serif;
+}
+
+h1 {
+    margin: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 3rem;
+}
+
+.submarine {
+    width: 8rem;
+    height: 16rem;
+    border: 1px solid #000;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sub-container {
+   
+    margin-left: 4rem;
+}
+
+.switch {
+    position: relative;
+    height: 1rem;
+    width: 3rem;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: flex-start;
+
+    &__inner {
+        display: block;
+        height: 1rem;
+        width: 1rem;
+        background-color: #aaa;
+    }
+}
+
+.js-switch-label {
+    position: absolute;
+    top: -1rem;
+    left: 6rem;
+}
+
+.play {
+    margin-top: 2rem;
+}
+
+.audio-controls {
+    margin-top: 4rem;
+    display: flex;
+
+    * + section {
+        margin-left: 5rem;
+    } 
+
+    input[type=range][orient=vertical] {
+        writing-mode: bt-lr; /* IE */
+        -webkit-appearance: slider-vertical; /* WebKit */
+        width: 8px;
+        height: 160px;
+        padding: 0 5px;
+        margin: 2em auto;
+    }
+}
+
+.channel-levels {
+    display: flex;
+
+    div > * {
+        display: block;
+    }
+}
+
+.slider {
+    text-align: center;
+    width: 5em;
+    border: 1px solid #000;
+
+    & + .slider {
+        margin-left: 0.5em
+    }
+}
