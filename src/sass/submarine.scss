@@ -1,19 +1,30 @@
+$brandLines: rgb(253, 205, 138);
+$brandText: rgb(242, 153, 112);
+$brandBackground: rgb(24, 27, 32);
 
 body {
+    margin: 0;
     font-family: "Josefin Sans",sans-serif;
 }
 
 h1 {
-    margin: 1rem;
+    color: $brandBackground;
+    margin: 1rem 4rem;
     font-style: normal;
     font-weight: 700;
     font-size: 3rem;
 }
 
+main {
+    padding: 4rem;
+    color: $brandText;
+    background-color: $brandBackground;
+}
+
 .submarine {
     width: 8rem;
     height: 16rem;
-    border: 1px solid #000;
+    border: 1px solid $brandLines;
     
     display: flex;
     flex-direction: column;
@@ -23,14 +34,14 @@ h1 {
 
 .sub-container {
    
-    margin-left: 4rem;
+    // margin-left: 4rem;
 }
 
 .switch {
     position: relative;
     height: 1rem;
     width: 3rem;
-    border: 1px solid #000;
+    border: 1px solid $brandLines;
     display: flex;
     justify-content: flex-start;
 
@@ -81,7 +92,7 @@ h1 {
 .slider {
     text-align: center;
     width: 5em;
-    border: 1px solid #000;
+    border: 1px solid $brandLines;
 
     & + .slider {
         margin-left: 0.5em

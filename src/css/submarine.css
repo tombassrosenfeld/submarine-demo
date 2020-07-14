@@ -1,33 +1,37 @@
 body {
+  margin: 0;
   font-family: "Josefin Sans", sans-serif;
 }
 
 h1 {
-  margin: 1rem;
+  color: #181b20;
+  margin: 1rem 4rem;
   font-style: normal;
   font-weight: 700;
   font-size: 3rem;
 }
 
+main {
+  padding: 4rem;
+  color: #f29970;
+  background-color: #181b20;
+}
+
 .submarine {
   width: 8rem;
   height: 16rem;
-  border: 1px solid #000;
+  border: 1px solid #fdcd8a;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 }
 
-.sub-container {
-  margin-left: 4rem;
-}
-
 .switch {
   position: relative;
   height: 1rem;
   width: 3rem;
-  border: 1px solid #000;
+  border: 1px solid #fdcd8a;
   display: flex;
   justify-content: flex-start;
 }
@@ -76,7 +80,7 @@ h1 {
 .slider {
   text-align: center;
   width: 5em;
-  border: 1px solid #000;
+  border: 1px solid #fdcd8a;
 }
 .slider + .slider {
   margin-left: 0.5em;
