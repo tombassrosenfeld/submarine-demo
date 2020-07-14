@@ -182,6 +182,8 @@
             jsSwitch.setContext(context, sources[i], sources[i + 6] );
         });
 
+        sources[12].connect(context.destination);
+
         // start playback
         sources.forEach((source, i) => {
             source.start(0);
