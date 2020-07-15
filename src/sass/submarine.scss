@@ -45,7 +45,7 @@ main {
     display: flex;
     justify-content: flex-start;
     box-sizing: border-box;
-    p {
+    label {
         color: $brandText;
     }
     
@@ -56,13 +56,17 @@ main {
         width: 1rem;
         background-color: $brandText;
     }
-}
 
-.js-switch-label {
-    position: absolute;
-    top: 2rem;
-    width: 100%;
-    text-align: center;
+    &__container {
+        position: relative;
+    }
+
+    &__label {
+        position: absolute;
+        top: 2rem;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .play {

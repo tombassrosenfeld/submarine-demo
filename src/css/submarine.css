@@ -39,7 +39,7 @@ main {
   justify-content: flex-start;
   box-sizing: border-box;
 }
-.switch p {
+.switch label {
   color: #f29970;
 }
 .switch__inner {
@@ -49,8 +49,10 @@ main {
   width: 1rem;
   background-color: #f29970;
 }
-
-.js-switch-label {
+.switch__container {
+  position: relative;
+}
+.switch__label {
   position: absolute;
   top: 2rem;
   width: 100%;

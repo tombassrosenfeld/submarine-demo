@@ -40,10 +40,8 @@
     }
     
     class Switch {
-        constructor(domSwitch, label, currentOutput = 0) {
-            this.currentOutput = currentOutput;
+        constructor(domSwitch) {
             this.domSwitch = domSwitch;
-            this.label = label;
             this.context = null;
             this.input1 = null;
             this.input2 = null;
@@ -51,17 +49,15 @@
             this.output2 = null;
         }
 
-        setDomClickEvent(){
-            this.domSwitch.addEventListener('click', () => {
-                this.toggleOutput();
-                const output = this.currentOutput;
-                
-                this.domSwitch.style.justifyContent = output === 0 ? "flex-start" : (output === 1 ? "center" : "flex-end");
-                this.label.textContent = this.getOutput();
+        setDomSwitchEvent(){
+            this.domSwitch.addEventListener('change', () => {
+                if (this.context){
+                    this.toggleOutput();
+                }
             })
         }
 
-        setContext( context, input1, input2){
+        setContext(context, input1, input2){
             
             //set context
             this.context = context;
@@ -75,8 +71,8 @@
             this.output2.connect(context.destination);
 
             // set initual gain levels
-            this.output1.gain.value = this.currentOutput === 0 ? 1 : 0;
-            this.output2.gain.value = this.currentOutput === 2 ? 1 : 0;
+            this.output1.gain.value = +this.domSwitch.value === 0 ? 1 : 0;
+            this.output2.gain.value = +this.domSwitch.value === 2 ? 1 : 0;
 
             //add buffers to inputs
             this.input1 = input1;
@@ -91,15 +87,13 @@
         // TO DO convert this to use data and have the output gain removed from the toggle so that user can channel select pre play
         
         toggleOutput() {
-            this.currentOutput = (this.currentOutput + 1) % 3;
-            
-            if (this.currentOutput === 0) {
+            if (+this.domSwitch.value === 0) {
                 this.output1.gain.value = 1;
                 this.output2.gain.value = 0;
-            } else if (this.currentOutput === 1) {
+            } else if (+this.domSwitch.value === 1) {
                 this.output1.gain.value = 0;
                 this.output2.gain.value = 0;
-            } else if (this.currentOutput === 2) {
+            } else if (+this.domSwitch.value === 2) {
                 this.output1.gain.value = 0;
                 this.output2.gain.value = 1;
             }
@@ -108,8 +102,31 @@
         }
 
         getOutput(){
-            return this.currentOutput === 0 ? "Dry" : (this.currentOutput === 1 ? "Off" : "Octave");
+            return +this.domSwitch.value === 0 ? "Effect" : (this.domSwitch.value === 1 ? "Off" : "Octave");
         }
+    }
+
+    class Mixer {
+        // change this to a fader class?
+        constructor(mixer, faders) {
+            this.mixer = mixer;
+            this.faders = faders;
+            this.context = null;
+            this.output = null;
+        }
+
+
+        initialiseFaders() {
+            this.faders.forEach((fader) => {
+                fader.addEventListener('change', () => {
+                    console.log(fader.value);
+                    if (this.context) {
+                        this.changeOutputLevel();
+                    }
+                })
+            })
+        }
+
     }
 
     window.AudioContext = window.AudioContext||window.webkitAudioContext;
@@ -117,6 +134,7 @@
             AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com",
             // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
             sourceList = [
+
                 // wet strings
 
                 `${AWS}/e_effect.wav`,
@@ -149,20 +167,23 @@
                 `${AWS}/full_acoustic.wav`,
             ],
             domSwitches = Array.from(d.getElementsByClassName('switch')),
-            labels = Array.from(d.getElementsByClassName('js-switch-label')),
+            // labels = Array.from(d.getElementsByClassName('js-switch-label')),
             controls = d.getElementById('js-controls'),
             play = d.getElementById('js-play'),
             pause = d.getElementById('js-pause'),
-            switches = domSwitches.map( (domSwitch, i) => addSwitch = new Switch(domSwitch, labels[i])),
+            switches = domSwitches.map((domSwitch, i) => addSwitch = new Switch(domSwitch)),
             video = d.getElementById('subVid');
 
     let context; 
-
-    switches.forEach((jsSwitch, i) => jsSwitch.setDomClickEvent());
+    
+    switches.forEach(jsSwitch => jsSwitch.setDomSwitchEvent());
+   
 
     const init = () => {
+        context = new AudioContext();
+
         const bufferLoader = new BufferLoader(
-            context = new AudioContext(),
+            context ,
             sourceList,
             finishedLoading
         );
@@ -178,9 +199,7 @@
             return source;
         });
 
-        switches.forEach((jsSwitch, i) => {
-            jsSwitch.setContext(context, sources[i], sources[i + 6] );
-        });
+        switches.forEach((jsSwitch, i) => jsSwitch.setContext(context, sources[i], sources[i + 6]));
 
         sources[12].connect(context.destination);
 
