@@ -18,24 +18,32 @@ main {
 }
 
 .submarine {
-  width: 8rem;
-  height: 16rem;
+  width: 22rem;
+  height: 8rem;
   border: 1px solid #fdcd8a;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }
+.submarine__container {
+  margin-left: 10rem;
+}
 
 .switch {
+  padding: 0;
   position: relative;
-  height: 1rem;
   width: 3rem;
   border: 1px solid #fdcd8a;
   display: flex;
   justify-content: flex-start;
+  box-sizing: border-box;
+}
+.switch p {
+  color: #f29970;
 }
 .switch__inner {
+  box-sizing: border-box;
   display: block;
   height: 1rem;
   width: 1rem;
@@ -44,8 +52,9 @@ main {
 
 .js-switch-label {
   position: absolute;
-  top: -1rem;
-  left: 6rem;
+  top: 2rem;
+  width: 100%;
+  text-align: center;
 }
 
 .play {
@@ -55,9 +64,10 @@ main {
 .audio-controls {
   margin-top: 4rem;
   display: flex;
+  flex-direction: column;
 }
 .audio-controls * + section {
-  margin-left: 5rem;
+  margin-top: 5rem;
 }
 .audio-controls input[type=range][orient=vertical] {
   writing-mode: bt-lr;
@@ -76,13 +86,17 @@ main {
 .channel-levels div > * {
   display: block;
 }
+.channel-levels .acoustic {
+  margin-right: 7rem;
+  margin-left: 3rem;
+}
 
-.slider {
+.fader {
   text-align: center;
   width: 5em;
   border: 1px solid #fdcd8a;
 }
-.slider + .slider {
+.fader + .fader {
   margin-left: 0.5em;
 }
 

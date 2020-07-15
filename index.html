@@ -19,44 +19,44 @@
             <button id="js-pause" class="pause" disabled>Pause</button>
         </div>
         <div class="audio-controls">
-            <section class="sub-container">
+            <section class="submarine__container">
                 <div id="sub-switches" class="submarine">
-                    <div id="switch1" class="switch" data-output="0">
+                    <button id="switch1" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch2" class="switch" data-output="0">
+                        <p class="js-switch-label">Effect</p>
+                    </button>
+                    <button id="switch2" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch3" class="switch" data-output="0">
+                        <p class="js-switch-label">Effect</p>
+                    </button>
+                    <button id="switch3" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch4" class="switch" data-output="0">
+                        <p class="js-switch-label">Effect</p>
+                    </button>
+                    <button id="switch4" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch5" class="switch" data-output="0">
+                        <p class="js-switch-label">Effect</p>
+                    </button>
+                    <button id="switch5" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch6" class="switch" data-output="0">
+                        <p class="js-switch-label">Effect</p>
+                    </button>
+                    <button id="switch6" class="switch" data-output="0">
                         <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
+                        <p class="js-switch-label">Effect</p>
+                    </button>
                 </div>
             </section>
-            <section class="channel-levels">
-                <div class="slider effects">
-                    <input id="effects" type="range" min="0" max="10" value="5" orient="vertical">
-                    <label for="effects">Effects</label>
-                </div>
-                <div class="slider acoustic">
+            <section id="mixer" class="channel-levels">
+                <div class="fader acoustic">
                     <input id="acoustic" type="range" min="0" max="10" value="5" orient="vertical">
                     <label for="acoustic">Acoustic</label>
                 </div>
-                <div class="slider octave">
+                <div class="fader effects">
+                    <input id="effects" type="range" min="0" max="10" value="5" orient="vertical">
+                    <label for="effects">Effects</label>
+                </div>
+                <div class="fader octave">
                     <input id="octave-down" type="range" min="0" max="10" value="5" orient="vertical">
                     <label for="octave-down">Octave Down</label>
                 </div>
