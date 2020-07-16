@@ -22,41 +22,51 @@ main {
 }
 
 .submarine {
-    width: 8rem;
-    height: 16rem;
+    width: 22rem;
+    height: 8rem;
     border: 1px solid $brandLines;
+
     
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     align-items: center;
-}
 
-.sub-container {
-   
-    // margin-left: 4rem;
+    &__container {
+        margin-left: 10rem;
+    }
 }
 
 .switch {
+    padding: 0;
     position: relative;
-    height: 1rem;
     width: 3rem;
     border: 1px solid $brandLines;
     display: flex;
     justify-content: flex-start;
-
+    box-sizing: border-box;
+    label {
+        color: $brandText;
+    }
+    
     &__inner {
+        box-sizing: border-box;
         display: block;
         height: 1rem;
         width: 1rem;
         background-color: $brandText;
     }
-}
 
-.js-switch-label {
-    position: absolute;
-    top: -1rem;
-    left: 6rem;
+    &__container {
+        position: relative;
+    }
+
+    &__label {
+        position: absolute;
+        top: 2rem;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .play {
@@ -66,9 +76,10 @@ main {
 .audio-controls {
     margin-top: 4rem;
     display: flex;
+    flex-direction: column;
 
     * + section {
-        margin-left: 5rem;
+        margin-top: 5rem;
     } 
 
     input[type=range][orient=vertical] {
@@ -87,14 +98,19 @@ main {
     div > * {
         display: block;
     }
+
+    .dry {
+        margin-right: 7rem;
+        margin-left: 3rem;
+    }
 }
 
-.slider {
+.fader {
     text-align: center;
     width: 5em;
     border: 1px solid $brandLines;
 
-    & + .slider {
+    & + .fader {
         margin-left: 0.5em
     }
 }

@@ -19,46 +19,46 @@
             <button id="js-pause" class="pause" disabled>Pause</button>
         </div>
         <div class="audio-controls">
-            <section class="sub-container">
+            <section class="submarine__container">
                 <div id="sub-switches" class="submarine">
-                    <div id="switch1" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch2" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch3" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch4" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch5" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
-                    <div id="switch6" class="switch" data-output="0">
-                        <span class="switch__inner"></span>
-                        <p class="js-switch-label">Dry</p>
-                    </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch1" class="switch">
+                        <!-- <label for="switch1" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch2" class="switch">
+                            <!-- <label for="switch2" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch3" class="switch">
+                        <!-- <label for="switch3" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch4" class="switch">
+                        <!-- <label for="switch4" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch5" class="switch">
+                        <!-- <label for="switch5" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
+                   <div class="switch__container">
+                        <input type="range" min="0" max="2" value="1" id="switch6" class="switch">
+                        <!-- <label for="switch6" class="js-switch-label switch__label">Effect</label> -->
+                   </div>
                 </div>
             </section>
-            <section class="channel-levels">
-                <div class="slider effects">
-                    <input id="effects" type="range" min="0" max="10" value="5" orient="vertical">
-                    <label for="effects">Effects</label>
+            <section id="mixer" class="channel-levels">
+                <div class="fader dry">
+                    <input id="dry" type="range" min="0" max="100" value="75" orient="vertical">
+                    <label for="dry">Dry</label>
                 </div>
-                <div class="slider acoustic">
-                    <input id="acoustic" type="range" min="0" max="10" value="5" orient="vertical">
-                    <label for="acoustic">Acoustic</label>
+                <div class="fader channel1">
+                    <input id="channel1" type="range" min="0" max="100" value="75" orient="vertical">
+                    <label for="channel1">Effects</label>
                 </div>
-                <div class="slider octave">
-                    <input id="octave-down" type="range" min="0" max="10" value="5" orient="vertical">
-                    <label for="octave-down">Octave Down</label>
+                <div class="fader channel2">
+                    <input id="channel2" type="range" min="0" max="100" value="75" orient="vertical">
+                    <label for="channel2">Octave Down</label>
                 </div>
             </section>
         </div>
