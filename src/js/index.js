@@ -7,6 +7,8 @@
             this.bufferList = new Array();
             this.loadCount = 0;
         }
+        
+        // TO DO - strip out API call so that assets are downloaded on page load
 
         loadBuffer(url, index) {
             // Load buffer asynchronously
@@ -55,9 +57,11 @@
                     this.toggleOutput();
                 }
             })
+
+            return this;
         }
 
-        setContext(context, input1, input2){
+        setContext(context, input1, input2, channel1, channel2){
             
             //set context
             this.context = context;
@@ -67,8 +71,8 @@
             this.output2 = context.createGain();
 
             // connect gain to destination
-            this.output1.connect(context.destination);
-            this.output2.connect(context.destination);
+            this.output1.connect(channel1.output);
+            this.output2.connect(channel2.output);
 
             // set initual gain levels
             this.output1.gain.value = +this.domSwitch.value === 0 ? 1 : 0;
@@ -106,78 +110,35 @@
         }
     }
 
-    class Mixer {
-        // change this to a fader class?
-        constructor(mixer, faders) {
-            this.mixer = mixer;
-            this.faders = faders;
+    class Fader {
+        constructor(fader) {
+            this.fader = fader;
             this.context = null;
             this.output = null;
         }
-
-
-        initialiseFaders() {
-            this.faders.forEach((fader) => {
-                fader.addEventListener('change', () => {
-                    console.log(fader.value);
-                    if (this.context) {
-                        this.changeOutputLevel();
-                    }
-                })
+        
+        setFaderEvent() {
+            this.fader.addEventListener('change', () => {
+                if (this.context) {
+                    this.setOutputGain();
+                }
+                return this;
             })
         }
-
+        
+        connectFader(context) {
+            this.context = context;
+            this.output = context.createGain();
+            this.setOutputGain();
+            this.output.connect(context.destination);
+            return this;
+        }
+        
+        setOutputGain() {
+            this.output.gain.value = +this.fader.value / 100;
+            return this;
+        }
     }
-
-    window.AudioContext = window.AudioContext||window.webkitAudioContext;
-    const   submarine  = d.getElementById('sub-switches'),
-            AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com",
-            // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
-            sourceList = [
-
-                // wet strings
-
-                `${AWS}/e_effect.wav`,
-                `${AWS}/a_effect.wav`,
-                `${AWS}/g_effect.wav`,
-                `${AWS}/d_effect.wav`,
-                `${AWS}/b_effect.wav`,
-                `${AWS}/ee_effect.wav`,
-               
-                // dry strings
-
-                // `${AWS}/e_dry.wav`,
-                // `${AWS}/a_dry.wav`,
-                // `${AWS}/g_dry.wav`,
-                // `${AWS}/d_dry.wav`,
-                // `${AWS}/b_dry.wav`,
-                // `${AWS}/ee_dry.wav`,
-
-                // octave strings
-
-                `${AWS}/e_octave.wav`,
-                `${AWS}/a_octave.wav`,
-                `${AWS}/g_octave.wav`,
-                `${AWS}/d_octave.wav`,
-                `${AWS}/b_octave.wav`,
-                `${AWS}/ee_octave.wav`,
-
-                // full acoustic
-
-                `${AWS}/full_acoustic.wav`,
-            ],
-            domSwitches = Array.from(d.getElementsByClassName('switch')),
-            // labels = Array.from(d.getElementsByClassName('js-switch-label')),
-            controls = d.getElementById('js-controls'),
-            play = d.getElementById('js-play'),
-            pause = d.getElementById('js-pause'),
-            switches = domSwitches.map((domSwitch, i) => addSwitch = new Switch(domSwitch)),
-            video = d.getElementById('subVid');
-
-    let context; 
-    
-    switches.forEach(jsSwitch => jsSwitch.setDomSwitchEvent());
-   
 
     const init = () => {
         context = new AudioContext();
@@ -199,25 +160,77 @@
             return source;
         });
 
-        switches.forEach((jsSwitch, i) => jsSwitch.setContext(context, sources[i], sources[i + 6]));
+        faders.forEach((fader) => fader.connectFader(context));
+        
+        switches.forEach((jsSwitch, i) => jsSwitch.setContext(context, sources[i], sources[i + 6], channel1, channel2));
+        sources[12].connect(dryFader.output);
 
-        sources[12].connect(context.destination);
 
         // start playback
         sources.forEach((source, i) => {
             source.start(0);
         });
-
+        
         video.play();
+        
+        sources[12].onended = () => {
+            pause.setAttribute('disabled', 'disabled');
+            play.removeAttribute('disabled');
+            context.close()
+        }
     }
 
-    let playing = false;
+    window.AudioContext = window.AudioContext||window.webkitAudioContext;
+    const   submarine  = d.getElementById('sub-switches'),
+            AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com",
+            // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
+            sourceList = [
 
+                // wet strings
+
+                `${AWS}/e_effect.wav`,
+                `${AWS}/a_effect.wav`,
+                `${AWS}/g_effect.wav`,
+                `${AWS}/d_effect.wav`,
+                `${AWS}/b_effect.wav`,
+                `${AWS}/ee_effect.wav`,
+      
+                // octave strings
+
+                `${AWS}/e_octave.wav`,
+                `${AWS}/a_octave.wav`,
+                `${AWS}/g_octave.wav`,
+                `${AWS}/d_octave.wav`,
+                `${AWS}/b_octave.wav`,
+                `${AWS}/ee_octave.wav`,
+
+                // full acoustic
+
+                `${AWS}/full_acoustic.wav`,
+            ],
+            switches = Array.from(d.getElementsByClassName('switch')).map((domSwitch, i) => addSwitch = new Switch(domSwitch)),
+            controls = d.getElementById('js-controls'),
+            play = d.getElementById('js-play'),
+            pause = d.getElementById('js-pause'),
+            video = d.getElementById('subVid'),
+            dryFader = new Fader(d.getElementById('dry')), 
+            channel1 = new Fader(d.getElementById('channel1')),
+            channel2 = new Fader(d.getElementById('channel2')),
+            faders = [dryFader, channel1, channel2];
+
+    let context;
+
+    faders.forEach(fader => fader.setFaderEvent());
+
+    switches.forEach(jsSwitch => jsSwitch.setDomSwitchEvent());
+   
+    //  TO DO make it possible to play again after video ends. 
+    
     controls.addEventListener('click', (e) => {
         const target = e.target;
 
-        if (target === play && !playing) {
-            playing = true;
+        if (target === play && (!context || context.state === "closed")) {
+            // playing = true;
             init();
             play.setAttribute('disabled', 'disabled');
             pause.removeAttribute('disabled');
@@ -227,7 +240,7 @@
                 pause.removeAttribute('disabled');
             });
             video.play();
-        } else if ( target === pause ) {
+        } else if ( target === pause && context.state === 'running' ) {
             context.suspend().then( () => {
                 pause.setAttribute('disabled', 'disabled');
                 play.removeAttribute('disabled');
@@ -235,5 +248,4 @@
             video.pause();
         }
     })
-
 })(document)
