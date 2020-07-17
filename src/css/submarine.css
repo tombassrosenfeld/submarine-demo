@@ -16,28 +16,52 @@ main {
   color: #f29970;
   background-color: #181b20;
 }
+main video {
+  max-width: 100%;
+}
 
 .submarine {
   width: 22rem;
-  height: 8rem;
+  max-width: 90%;
+  height: 3rem;
+  padding: 0 3rem;
   border: 1px solid #fdcd8a;
+  border-radius: 50% 50% 10% 10%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-end;
 }
 .submarine__container {
   margin-left: 10rem;
 }
 
+.channel-levels input[type=range], .switch__container input[type=range] {
+  -webkit-appearance: none;
+  /* Hides the slider so that custom slider can be made */
+  background: transparent;
+  /* Otherwise white in Chrome */
+}
+.channel-levels input[type=range]::-webkit-slider-thumb, .switch__container input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+.channel-levels input[type=range]:focus, .switch__container input[type=range]:focus {
+  outline: none;
+  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  box-shadow: 0px 0px 0px 1px #fdcd8a;
+}
+.channel-levels input[type=range]::-ms-track, .switch__container input[type=range]::-ms-track {
+  cursor: pointer;
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
 .switch {
-  padding: 0;
   position: relative;
   width: 3rem;
   border: 1px solid #fdcd8a;
-  display: flex;
-  justify-content: flex-start;
-  box-sizing: border-box;
 }
 .switch label {
   color: #f29970;
@@ -51,6 +75,27 @@ main {
 }
 .switch__container {
   position: relative;
+}
+.switch__container input[type=range]::-webkit-slider-thumb {
+  height: 1rem;
+  width: 1rem;
+  background: #f29970;
+  border: none;
+  border-radius: 0;
+}
+.switch__container input[type=range]::-moz-range-thumb {
+  height: 1rem;
+  width: 1rem;
+  background: #f29970;
+  border: none;
+  border-radius: 0;
+}
+.switch__container input[type=range]::-ms-thumb {
+  height: 1rem;
+  width: 1rem;
+  background: #f29970;
+  border: none;
+  border-radius: 0;
 }
 .switch__label {
   position: absolute;
@@ -71,16 +116,6 @@ main {
 .audio-controls * + section {
   margin-top: 5rem;
 }
-.audio-controls input[type=range][orient=vertical] {
-  writing-mode: bt-lr;
-  /* IE */
-  -webkit-appearance: slider-vertical;
-  /* WebKit */
-  width: 8px;
-  height: 160px;
-  padding: 0 5px;
-  margin: 2em auto;
-}
 
 .channel-levels {
   display: flex;
@@ -89,8 +124,43 @@ main {
   display: block;
 }
 .channel-levels .dry {
-  margin-right: 7rem;
+  margin-right: 10rem;
   margin-left: 3rem;
+}
+.channel-levels input[type=range][orient=vertical] {
+  writing-mode: bt-lr;
+  /* IE */
+  -webkit-appearance: slider-vertical;
+  /* WebKit */
+  width: 1px;
+  height: 160px;
+  padding: 0;
+  margin: 2em auto;
+  background-color: #fdcd8a;
+}
+.channel-levels input[type=range]::-webkit-slider-thumb {
+  height: 2.5rem;
+  width: 1.5rem;
+  background: linear-gradient(to bottom, #181b20 1px, #181b20 calc(100% - 1px), #fdcd8a 1px);
+  background-size: 100% 0.5rem;
+  border: 1px solid #fdcd8a;
+  border-radius: 1px;
+}
+.channel-levels input[type=range]::-moz-range-thumb {
+  height: 2.5rem;
+  width: 1.5rem;
+  background: linear-gradient(to bottom, #181b20 1px, #181b20 calc(100% - 1px), #fdcd8a 1px);
+  background-size: 100% 0.5rem;
+  border: 1px solid #fdcd8a;
+  border-radius: 1px;
+}
+.channel-levels input[type=range]::-ms-thumb {
+  height: 2.5rem;
+  width: 1.5rem;
+  background: linear-gradient(to bottom, #181b20 1px, #181b20 calc(100% - 1px), #fdcd8a 1px);
+  background-size: 100% 0.5rem;
+  border: 1px solid #fdcd8a;
+  border-radius: 1px;
 }
 
 .fader {
