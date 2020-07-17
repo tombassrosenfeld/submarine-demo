@@ -5,6 +5,10 @@ $brandBackground: rgb(24, 27, 32);
 body {
     margin: 0;
     font-family: "Josefin Sans",sans-serif;
+
+    * {
+        box-sizing: border-box;
+    }
 }
 
 h1 {
@@ -21,7 +25,8 @@ main {
     background-color: $brandBackground;
 
     video {
-        max-width: 100%;
+        width: 100%;
+        max-width: 800px;
     }
 }
 
@@ -32,8 +37,6 @@ main {
     padding: 0 3rem;
     border: 1px solid $brandLines;
     border-radius: 50% 50% 10% 10%;
-
-    
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -73,8 +76,8 @@ main {
 }
 
 @mixin switchThumb {
-    height: 1rem;
-    width: 1rem;
+    height: 100%;
+    width: 33%;
     background: $brandText;
     border: none;
     border-radius: 0;
@@ -97,23 +100,17 @@ main {
 
 .switch {
     position: relative;
-    width: 3rem;
+    width: 100%;
     border: 1px solid $brandLines;
 
     label {
         color: $brandText;
     }
-    
-    &__inner {
-        box-sizing: border-box;
-        display: block;
-        height: 1rem;
-        width: 1rem;
-        background-color: $brandText;
-    }
 
     &__container {
         position: relative;
+
+        width: 14%;
 
         // range input styling
         @extend %remove_range_defaults;

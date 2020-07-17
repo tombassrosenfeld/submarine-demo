@@ -2,6 +2,9 @@ body {
   margin: 0;
   font-family: "Josefin Sans", sans-serif;
 }
+body * {
+  box-sizing: border-box;
+}
 
 h1 {
   color: #181b20;
@@ -17,7 +20,8 @@ main {
   background-color: #181b20;
 }
 main video {
-  max-width: 100%;
+  width: 100%;
+  max-width: 800px;
 }
 
 .submarine {
@@ -60,39 +64,33 @@ main video {
 
 .switch {
   position: relative;
-  width: 3rem;
+  width: 100%;
   border: 1px solid #fdcd8a;
 }
 .switch label {
   color: #f29970;
 }
-.switch__inner {
-  box-sizing: border-box;
-  display: block;
-  height: 1rem;
-  width: 1rem;
-  background-color: #f29970;
-}
 .switch__container {
   position: relative;
+  width: 14%;
 }
 .switch__container input[type=range]::-webkit-slider-thumb {
-  height: 1rem;
-  width: 1rem;
+  height: 100%;
+  width: 33%;
   background: #f29970;
   border: none;
   border-radius: 0;
 }
 .switch__container input[type=range]::-moz-range-thumb {
-  height: 1rem;
-  width: 1rem;
+  height: 100%;
+  width: 33%;
   background: #f29970;
   border: none;
   border-radius: 0;
 }
 .switch__container input[type=range]::-ms-thumb {
-  height: 1rem;
-  width: 1rem;
+  height: 100%;
+  width: 33%;
   background: #f29970;
   border: none;
   border-radius: 0;
