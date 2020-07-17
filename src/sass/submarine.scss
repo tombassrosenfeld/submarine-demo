@@ -19,32 +19,87 @@ main {
     padding: 4rem;
     color: $brandText;
     background-color: $brandBackground;
+
+    video {
+        max-width: 100%;
+    }
 }
 
 .submarine {
     width: 22rem;
-    height: 8rem;
+    max-width: 90%;
+    height: 3rem;
+    padding: 0 3rem;
     border: 1px solid $brandLines;
+    border-radius: 50% 50% 10% 10%;
 
     
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end;
 
     &__container {
         margin-left: 10rem;
     }
 }
 
+%remove_range_defaults {
+
+    input[type=range] {
+        -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+        // width: 100%; /* Specific width is required for Firefox. */
+        background: transparent; /* Otherwise white in Chrome */
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+        }
+
+        &:focus {
+            outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+        box-shadow: 0px 0px 0px 1px $brandLines;
+        }
+
+        &::-ms-track {
+            // width: 100%;
+            cursor: pointer;
+            
+            /* Hides the slider so custom styles can be added */
+            background: transparent; 
+            border-color: transparent;
+            color: transparent;
+        }
+    }
+}
+
+@mixin switchThumb {
+    height: 1rem;
+    width: 1rem;
+    background: $brandText;
+    border: none;
+    border-radius: 0;
+}
+
+@mixin faderThumb {
+    height: 2.5rem;
+    width: 1.5rem;
+    background: linear-gradient(
+        to bottom,
+        $brandBackground 1px,
+        $brandBackground calc(100% - 1px),
+        $brandLines 1px,
+    );
+    background-size: 100% 0.5rem;
+    border: 1px solid $brandLines;
+    border-radius: 1px;
+}
+
+
 .switch {
-    padding: 0;
     position: relative;
     width: 3rem;
     border: 1px solid $brandLines;
-    display: flex;
-    justify-content: flex-start;
-    box-sizing: border-box;
+
     label {
         color: $brandText;
     }
@@ -59,6 +114,22 @@ main {
 
     &__container {
         position: relative;
+
+        // range input styling
+        @extend %remove_range_defaults;
+
+        input[type=range] {
+
+            &::-webkit-slider-thumb {
+                @include switchThumb();
+            }
+            &::-moz-range-thumb {
+                @include switchThumb();
+            }
+            &::-ms-thumb {
+                @include switchThumb();
+            }
+        }
     }
 
     &__label {
@@ -73,6 +144,7 @@ main {
     margin-top: 2rem;
 }
 
+
 .audio-controls {
     margin-top: 4rem;
     display: flex;
@@ -82,14 +154,8 @@ main {
         margin-top: 5rem;
     } 
 
-    input[type=range][orient=vertical] {
-        writing-mode: bt-lr; /* IE */
-        -webkit-appearance: slider-vertical; /* WebKit */
-        width: 8px;
-        height: 160px;
-        padding: 0 5px;
-        margin: 2em auto;
-    }
+   
+   
 }
 
 .channel-levels {
@@ -100,8 +166,34 @@ main {
     }
 
     .dry {
-        margin-right: 7rem;
+        margin-right: 10rem;
         margin-left: 3rem;
+    }
+
+    // range input styles
+    @extend %remove_range_defaults;
+
+    input[type=range]{
+        &[orient=vertical] {
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical; /* WebKit */
+            width: 1px;
+            height: 160px;
+            padding: 0;
+            margin: 2em auto;
+            background-color: $brandLines;
+        }
+
+        &::-webkit-slider-thumb {
+            @include faderThumb();
+        }
+        &::-moz-range-thumb {
+            @include faderThumb();
+        }
+        &::-ms-thumb {
+            @include faderThumb();
+        }
+        
     }
 }
 
