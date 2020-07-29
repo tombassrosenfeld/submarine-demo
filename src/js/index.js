@@ -1,8 +1,9 @@
-(d => {
+( async (d, w)=> {
+   
     class BufferLoader {
-        constructor(context, urlList, callback) {
+        constructor(context, audioBuffers, callback) {
             this.context = context;
-            this.urlList = urlList;
+            this.audioBuffers = audioBuffers;
             this.onload = callback;
             this.bufferList = new Array();
             this.loadCount = 0;
@@ -10,34 +11,28 @@
         
         // TO DO - strip out API call so that assets are downloaded on page load
 
-        loadBuffer(url, index) {
-            // Load buffer asynchronously
-            var request = new XMLHttpRequest();
-            request.open("GET", url, true);
-            request.responseType = "arraybuffer";
-            var loader = this;
-            request.onload = function () {            
-                // Asynchronously decode the audio file data in request.response
-                loader.context.decodeAudioData(request.response, function (buffer) {
-                    if (!buffer) {
-                        alert('error decoding file data: ' + url);
-                        return;
-                    }
-                    loader.bufferList[index] = buffer;
-                    if (++loader.loadCount == loader.urlList.length)
-                        loader.onload(loader.bufferList);
-                }, function (error) {
-                    console.error('decodeAudioData error', error);
-                });
-            };
-            request.onerror = function () {
-                alert('BufferLoader: XHR error');
-            };
-            request.send();
+        loadBuffer(buffer, index) {
+            // console.log(buffer);
+            var loader = this;  
+            loader.context.decodeAudioData(buffer, function (buffer) {
+                if (!buffer) {
+                    alert('error decoding file data: ' + url);
+                    return;
+                }
+                loader.bufferList[index] = buffer;
+                if (++loader.loadCount == loader.audioBuffers.length)
+                    loader.onload(loader.bufferList);
+            }, function (error) {
+                console.error('decodeAudioData error', error);
+            });
         }
         load() {
-            for (var i = 0; i < this.urlList.length; ++i)
-                this.loadBuffer(this.urlList[i], i);
+            // console.log(this.audioBuffers[0]);
+            // this.loadBuffer(this.audioBuffers[0], 0);
+            this.audioBuffers.forEach((buffer, i) => this.loadBuffer(buffer, i));
+
+            // for (var i = 0; i < this.urlList.length; ++i)
+            //     this.loadBuffer(this.urlList[i], i);
         }
     }
     
@@ -52,12 +47,11 @@
         }
 
         setDomSwitchEvent(){
-            this.domSwitch.addEventListener('change', () => {
+            this.domSwitch.addEventListener('input', () => {
                 if (this.context){
                     this.toggleOutput();
                 }
             })
-
             return this;
         }
 
@@ -118,7 +112,7 @@
         }
         
         setFaderEvent() {
-            this.fader.addEventListener('change', () => {
+            this.fader.addEventListener('input', () => {
                 if (this.context) {
                     this.setOutputGain();
                 }
@@ -135,17 +129,17 @@
         }
         
         setOutputGain() {
-            this.output.gain.value = +this.fader.value / 100;
+            this.output.gain.value = +this.fader.value / +this.fader.max;
             return this;
         }
     }
 
-    const init = () => {
+    const init = (audioBuffers) => {
         context = new AudioContext();
 
         const bufferLoader = new BufferLoader(
             context ,
-            sourceList,
+            audioBuffers,
             finishedLoading
         );
 
@@ -180,7 +174,7 @@
         }
     }
 
-    window.AudioContext = window.AudioContext||window.webkitAudioContext;
+    w.AudioContext = w.AudioContext || w.webkitAudioContext;
     const   submarine  = d.getElementById('sub-switches'),
             AWS ="https://submarine-audio.s3.eu-west-2.amazonaws.com",
             // in the source list, add the 12 single string tracks first (in groups of six rather than pairs of the same string) and the full recording last.
@@ -220,6 +214,18 @@
 
     let context;
 
+    const cacheAudio = (func) => {
+        
+    };
+    const fetchAudio = async (urlArray) => {
+        let requests =  urlArray.map((url, i) => fetch(url).catch((err) => console.log(err)));
+        let responses = await Promise.all(requests);
+        let audioBuffers = await Promise.all(responses.map(response => response.arrayBuffer()));
+        return audioBuffers;
+    }
+
+    let audioFiles = await fetchAudio(sourceList);
+
     faders.forEach(fader => fader.setFaderEvent());
 
     switches.forEach(jsSwitch => jsSwitch.setDomSwitchEvent());
@@ -228,10 +234,9 @@
     
     controls.addEventListener('click', (e) => {
         const target = e.target;
-
+        // console.log(audioFiles);
         if (target === play && (!context || context.state === "closed")) {
-            // playing = true;
-            init();
+            init(audioFiles);
             play.setAttribute('disabled', 'disabled');
             pause.removeAttribute('disabled');
         } else if (target === play && context.state === 'suspended') {
@@ -248,4 +253,4 @@
             video.pause();
         }
     })
-})(document)
+})(document, window)
