@@ -11,12 +11,9 @@
         
         // TO DO - strip out API call so that assets are downloaded on page load
 
-        async loadBuffer(audioFile, index) {
-            // console.log(buffer);
-            let buffer = async audioFile => audioFile.arrayBuffer();
+        loadBuffer(buffer, index) {
             var loader = this;  
-            console.log(await buffer(audioFile));
-            loader.context.decodeAudioData(await buffer(audioFile), function (buffer) {
+            loader.context.decodeAudioData(buffer, function (buffer) {
                 if (!buffer) {
                     alert('error decoding file data: ' + url);
                     return;
@@ -28,13 +25,13 @@
                 console.error('decodeAudioData error', error);
             });
         }
-        load() {
-            // console.log(this.audioFiles[0]);
-            // this.loadBuffer(this.audioFiles[0], 0);
-            this.audioFiles.forEach((buffer, i) => this.loadBuffer(buffer, i));
-            
-            // for (var i = 0; i < this.urlList.length; ++i)
-            //     this.loadBuffer(this.urlList[i], i);
+        async load() {
+            // clone responses so that they can be reused
+            let audioCopies = this.audioFiles.map(audioFile => audioFile.clone());
+            // extract array buffers from copied api response
+            let audioBuffers = await Promise.all(audioCopies.map(audioFile => audioFile.arrayBuffer()));
+            // run load buffer for each arrayBuffer
+            audioBuffers.forEach((buffer, i) => this.loadBuffer(buffer, i));
         }
     }
     
@@ -136,12 +133,12 @@
         }
     }
 
-    const init = (audioFiles) => {
+    const init = (audioBuffers) => {
         context = new AudioContext();
 
         const bufferLoader = new BufferLoader(
             context ,
-            audioFiles,
+            audioBuffers,
             finishedLoading
         );
 
@@ -235,7 +232,6 @@
     
     controls.addEventListener('click', (e) => {
         const target = e.target;
-        // console.log(audioFiles);
         if (target === play && (!context || context.state === "closed")) {
             init(audioFiles);
             play.setAttribute('disabled', 'disabled');
