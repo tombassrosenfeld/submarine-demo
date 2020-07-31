@@ -1,9 +1,9 @@
 ( async (d, w)=> {
    
     class BufferLoader {
-        constructor(context, audioBuffers, callback) {
+        constructor(context, audioFiles, callback) {
             this.context = context;
-            this.audioBuffers = audioBuffers;
+            this.audioFiles = audioFiles;
             this.onload = callback;
             this.bufferList = new Array();
             this.loadCount = 0;
@@ -11,26 +11,28 @@
         
         // TO DO - strip out API call so that assets are downloaded on page load
 
-        loadBuffer(buffer, index) {
+        async loadBuffer(audioFile, index) {
             // console.log(buffer);
+            let buffer = async audioFile => audioFile.arrayBuffer();
             var loader = this;  
-            loader.context.decodeAudioData(buffer, function (buffer) {
+            console.log(await buffer(audioFile));
+            loader.context.decodeAudioData(await buffer(audioFile), function (buffer) {
                 if (!buffer) {
                     alert('error decoding file data: ' + url);
                     return;
                 }
                 loader.bufferList[index] = buffer;
-                if (++loader.loadCount == loader.audioBuffers.length)
+                if (++loader.loadCount == loader.audioFiles.length)
                     loader.onload(loader.bufferList);
             }, function (error) {
                 console.error('decodeAudioData error', error);
             });
         }
         load() {
-            // console.log(this.audioBuffers[0]);
-            // this.loadBuffer(this.audioBuffers[0], 0);
-            this.audioBuffers.forEach((buffer, i) => this.loadBuffer(buffer, i));
-
+            // console.log(this.audioFiles[0]);
+            // this.loadBuffer(this.audioFiles[0], 0);
+            this.audioFiles.forEach((buffer, i) => this.loadBuffer(buffer, i));
+            
             // for (var i = 0; i < this.urlList.length; ++i)
             //     this.loadBuffer(this.urlList[i], i);
         }
@@ -134,12 +136,12 @@
         }
     }
 
-    const init = (audioBuffers) => {
+    const init = (audioFiles) => {
         context = new AudioContext();
 
         const bufferLoader = new BufferLoader(
             context ,
-            audioBuffers,
+            audioFiles,
             finishedLoading
         );
 
@@ -220,8 +222,7 @@
     const fetchAudio = async (urlArray) => {
         let requests =  urlArray.map((url, i) => fetch(url).catch((err) => console.log(err)));
         let responses = await Promise.all(requests);
-        let audioBuffers = await Promise.all(responses.map(response => response.arrayBuffer()));
-        return audioBuffers;
+        return responses;
     }
 
     let audioFiles = await fetchAudio(sourceList);
