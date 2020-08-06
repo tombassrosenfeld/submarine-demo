@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "test for submarine pickup audio",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-sass": "^4.1.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "npm test"
