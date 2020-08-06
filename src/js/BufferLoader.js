@@ -1,7 +1,14 @@
 export default class BufferLoader {
+<<<<<<< HEAD
     constructor(context, audioFiles) {
         this.context = context;
         this.audioFiles = audioFiles;
+=======
+    constructor(context, audioFiles, callback) {
+        this.context = context;
+        this.audioFiles = audioFiles;
+        this.onload = callback;
+>>>>>>> b99bf50e4237ea1dd7aa032a44088bafc4dd253f
         this.bufferList = new Array();
         this.loadCount = 0;
     }
@@ -15,7 +22,11 @@ export default class BufferLoader {
             }
             loader.bufferList[index] = buffer;
             if (++loader.loadCount == loader.audioFiles.length)
+<<<<<<< HEAD
                 loader.finishedLoading(loader.bufferList);
+=======
+                loader.onload(loader.bufferList);
+>>>>>>> b99bf50e4237ea1dd7aa032a44088bafc4dd253f
         }, function (error) {
             console.error('decodeAudioData error', error);
         });
@@ -28,6 +39,7 @@ export default class BufferLoader {
         // run load buffer for each arrayBuffer
         audioBuffers.forEach((buffer, i) => this.loadBuffer(buffer, i));
     }
+<<<<<<< HEAD
 
     finishedLoading(bufferList) {
         // set up sources
@@ -56,4 +68,6 @@ export default class BufferLoader {
             context.close()
         }
     }
+=======
+>>>>>>> b99bf50e4237ea1dd7aa032a44088bafc4dd253f
 }
